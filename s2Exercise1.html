@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+
+    <div id="exercise">
+       <!-- 1) Fill the <p> below with your Name and Age - using Interpolation -->
+        <p>VueJS is pretty cool - {{ name }} ({{ age }})</p>
+        <!-- 2) Output your age, multiplied by 3 -->
+        <p>{{ age * 3 }}</p>
+        <!-- 3) Call a function to output a random float between 0 and 1 (Math.random()) -->
+        <p>{{ getrando() }}</p>
+        <!-- 4) Search any image on Google and output it here by binding the "src" attribute -->
+        <div>
+            <img v-bind:src="imglink" style="width:100px;height:100px">
+        </div>
+        <!-- 5) Pre-Populate this input with your name (set the "value" attribute) -->
+        <div>
+            <input v-bind:value="name" type="text">
+        </div>
+    </div>
+
+    <script type="text/javascript">
+      new Vue({
+        el: '#exercise',
+        data: {
+          name: 'Andrew',
+          age: 36,
+          imglink: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7aPMYdHSWANE0fR6u-IJ5DDztRICVzHStSpje7-eJcRqM9S7l_A'
+        },
+        methods: {
+          multage: function() {
+            return this.age * 3;
+          },
+          getrando: function() {
+            return Math.floor(Math.random() * 100) + 1;
+          }
+        }
+      })
+
+    </script>
+
+  </body>
+</html>
