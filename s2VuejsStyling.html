@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"> <title>Section 2 - JS Templates</title>
+    <script src="https://unpkg.com/vue"></script>
+    <style media="screen">
+      .demo {
+        width: 100px;
+        height: 100px;
+        background-color: gray;
+        display: inline-block;
+        margin: 10px;
+      }
+      .red { background-color: red; }
+      .green { background-color: green; }
+      .blue { background-color: blue; }
+    </style>
+  </head>
+  <body>
+
+    <div id="app">
+      <div
+        class="demo"
+        @click="attachRed = !attachRed"
+        :class = "divClasses">
+      </div>
+      <div class="demo" :class="{red: attachRed}"></div>
+      <div class="demo" :class="color"></div>
+      <hr>
+      <div class="demo" :style="{'background-color': color}"></div>
+      <div class="demo" :style="myStyle"></div>
+      <div class="demo" :style="[myStyle, {height: width + 'px'}]"></div>
+      <input type="text" v-model="color">
+      <input type="text" v-model="width">
+    </div>
+
+
+
+    <script type="text/javascript">
+      new Vue({
+        el: '#app',
+        data: {
+          attachRed: false,
+          color: 'green',
+          width: 100
+        },
+        computed: {
+          myStyle: function() {
+            return {
+              backgroundColor: this.color,
+              width: this.width + 'px'
+            };
+          },
+          divClasses: function() {
+            return {
+              red: this.attachRed,
+              blue: !this.attachRed
+            }
+          }
+        }
+      });
+    </script>
+
+  </body>
+</html>
