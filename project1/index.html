@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Monster Slayer</title>
+    <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="foundation.min.css">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div id="app">
+    <section class="row">
+        <div class="small-6 columns">
+            <h1 class="text-center">YOU</h1>
+            <div class="healthbar">
+                <div
+                    class="healthbar text-center"
+                    style="background-color: green; margin: 0; color: white;"
+                    :style="{width: healthMe + '%'}"
+                >
+                  {{ healthMe }}
+                </div>
+            </div>
+        </div>
+        <div class="small-6 columns">
+            <h1 class="text-center">MONSTER</h1>
+            <div class="healthbar">
+                <div
+                    class="healthbar text-center"
+                    style="background-color: green; margin: 0; color: white;"
+                    :style="{width: healthMonster + '%'}"
+                >
+                  {{ healthMonster }}
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="row controls" v-if="!inGame">
+        <div class="small-12 columns">
+            <button id="start-game" @click="startGame()">START NEW GAME</button>
+        </div>
+    </section>
+    <section class="row controls" v-if="inGame">
+        <div class="small-12 columns">
+            <button id="attack" @click="attack()">ATTACK</button>
+            <button id="special-attack" @click="specialAttack()">SPECIAL ATTACK</button>
+            <button id="heal" @click="heal()">HEAL</button>
+            <button id="give-up" @click="giveUp()">GIVE UP</button>
+        </div>
+    </section>
+    <section class="row log" v-if="turns.length > 0">
+        <div class="small-12 columns">
+            <ul>
+                <li v-for="t in turns"
+                    :class="[{'player-turn': t.isPlayer}, {'monster-turn': !t.isPlayer}]">
+                  {{ t.text }}
+                </li>
+            </ul>
+        </div>
+    </section>
+</div>
+
+<script type="text/javascript">
+  new Vue({
+    el: "#app",
+    data: {
+      healthMe: 100,
+      healthMonster: 100,
+      inGame: false,
+      turns: []
+    },
+    methods: {
+      attack: function() {
+        var damage = this.calculateDamage(3, 10);
+        this.healthMonster -= damage;
+        this.turns.unshift({
+          isPlayer: true,
+          text: 'Player hits Monster for ' + damage
+        });
+        if (this.checkWin()) { return; }
+        this.monsterAttacks();
+      },
+      specialAttack: function() {
+        var damage = this.calculateDamage(10, 20);
+        this.healthMonster -= damage;
+        this.turns.unshift({
+          isPlayer: true,
+          text: 'Player hits Monster hard for ' + damage
+        });
+        if (this.checkWin()) { return; }
+        this.monsterAttacks();
+      },
+      heal: function() {
+        this.healthMe <= 90 ? this.healthMe += 10 : this.healthMe = 100;
+        this.turns.unshift({
+          isPlayer: true,
+          text: 'Player heals for 10'
+        });
+        this.monsterAttacks();
+      },
+      giveUp: function() {
+        alert('You gave up and you lost!');
+        this.inGame = false;
+      },
+      startGame: function() {
+        this.inGame = true;
+        this.healthMonster = 100;
+        this.healthMe = 100;
+        this.turns = [];
+      },
+      monsterAttacks: function() {
+        var damage = this.calculateDamage(5, 12);
+        this.healthMe -= damage;
+        this.turns.unshift({
+          isPlayer: false,
+          text: 'Monster hits Player for ' + damage
+        });
+        this.checkWin();
+      },
+      calculateDamage: function(min, max) {
+        return min + Math.floor(Math.random() * (max+1-min));
+      },
+      checkWin: function() {
+        if (this.healthMonster <= 0) {
+          confirm('You won! New Game?') ? this.startGame() : this.inGame = false;
+          return true;
+
+        } else if (this.healthMe <= 0) {
+          confirm('You lost! New Game?') ? this.startGame() : this.inGame = false;
+          return true;
+        }
+
+        return false;
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

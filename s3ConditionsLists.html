@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+
+    <div id="app">
+      <p v-if="show">You can see me!</p>
+      <p v-else>Now you see me!</p>
+      <button @click="show = !show">To show or not to show</button>
+      <ul>
+        <li v-for="(item, i) in ingredients" :key="item">{{ item }} ({{ i }})</li>
+      </ul>
+      <template v-if="!show" v-for="(item, i) in ingredients">
+        <h3>{{item}}</h3>
+        <p>{{i}}</p>
+      </template>
+      <button @click="ingredients.push('spices')">Add New</button>
+      <hr>
+      <ul>
+        <li v-for="person in persons">
+          <span v-for="(value, key) in person">{{ key }}: {{ value }}</span>
+        </li>
+      </ul>
+      <span v-for="n in 10">{{ n }}</span>
+      <hr>
+    </div>
+
+
+    <script type="text/javascript">
+      new Vue({
+        el: '#app',
+        data: {
+          show: true,
+          ingredients: ['meat', 'fruit', 'cookies'],
+          persons: [
+            {name: 'Max', age: 27, color: 'red'},
+            {name: 'Anna', age: 'unknown', color: 'blue'}
+          ]
+        }
+      });
+    </script>
+
+  </body>
+</html>
