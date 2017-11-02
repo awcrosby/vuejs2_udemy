@@ -6,22 +6,33 @@
                 <p>{{ text|toUppercase }}</p>
                 <p>{{ text|toLowercase }}</p>
                 <hr>
+                <input v-model="name">
+                <button v-on:click="changeName()">change name</button>
+                <hr>
+                <button v-on:click="fruits.push('Berries')">Add New</button>
                 <input v-model="filterText">
                 <ul>
                     <li v-for="fruit in filteredFruits">{{ fruit }}</li>
                 </ul>
+                <hr>
+                <app-list></app-list>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import List from './List.vue';
+    import { fruitMixin } from './fruitMixin';
+    import { sharedObj } from './sharedObj';
+
     export default {
+        mixins: [ fruitMixin ],
         data() {
             return {
+                fruits: ['Apple', 'Banana'],
                 text: 'Hello there!',
-                fruits: ['Apple', 'Banana', 'Mango', 'Melon'],
-                filterText: ''
+                name: sharedObj.name
             }
         },
         filters: {
@@ -29,11 +40,13 @@
                 return value.toUpperCase();
             }
         },
-        computed: {
-            filteredFruits() {
-                return this.fruits.filter((element) => {
-                    return element.match(this.filterText);
-                });
+        components: {
+            'app-list': List
+        },
+        methods: {
+            changeName() {
+                sharedObj.name = 'Newton';
+                this.name = sharedObj.name;
             }
         }
     }
